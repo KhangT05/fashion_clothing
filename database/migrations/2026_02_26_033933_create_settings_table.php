@@ -33,6 +33,7 @@ return new class extends Migration
             $table->text('warranty_policy')->nullable();
             $table->text('privacy_policy')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

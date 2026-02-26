@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(1);
             $table->tinyInteger('is_parent');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

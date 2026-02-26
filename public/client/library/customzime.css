@@ -1,0 +1,118 @@
+.account-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.account-btn:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.account-icon {
+    margin-right: 5px;
+}
+
+.btn-login,
+.btn-register {
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+.btn-login {
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-login:hover {
+    background: #0056b3;
+    color: white;
+}
+
+.btn-register {
+    background: white;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-register:hover {
+    background: #007bff;
+    color: white;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.product-img {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+.wishlist-btn {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .wishlist-btn {
+    opacity: 1;
+}
+
+.product-title:hover {
+    color: #667eea !important;
+}
+
+.btn[style*="background-color: #667eea"]:hover {
+    background-color: #5568d3 !important;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.card:hover .btn-light {
+    opacity: 1 !important;
+}
+
+.card a[href*="cart.html"]:hover {
+    background-color: #5568d3 !important;
+}
+
+.card-title:hover {
+    color: #667eea !important;
+}
+
+.badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

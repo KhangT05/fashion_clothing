@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('birthday')->nullable()->after('gender');
             $table->text('avatar')->nullable()->after('birthday');
             $table->tinyInteger('publish')->default(2)->after('avatar');
+            $table->softDeletes();
         });
     }
 

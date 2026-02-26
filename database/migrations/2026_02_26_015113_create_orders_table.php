@@ -31,6 +31,7 @@ return new class extends Migration
             $table->foreign('ward_code')->references('ward_code')->on('wards')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->json('album')->nullable();
             $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable(); // Ảnh đại diện
             $table->boolean('is_active')->default(true); // 1 = Hiện, 0 = Ẩn
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

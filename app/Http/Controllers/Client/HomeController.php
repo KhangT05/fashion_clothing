@@ -34,7 +34,7 @@ class HomeController extends Controller
         $sliderequest = new request();
         $slide = $this->slideService->pagination($sliderequest->merge([
             'type' => 'all',
-            'sort' => 'stt,asc',
+            'sort' => 'order,asc',
         ]));
         $sanphamRequest = new request();
         $sanphamRequest->merge([

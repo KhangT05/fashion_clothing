@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('star')->default(0);
             $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

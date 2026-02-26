@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('content')->nullable();
             $table->tinyInteger('publish')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

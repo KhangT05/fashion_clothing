@@ -6,18 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 use App\Services\ContactService;
 use App\Http\Requests\Client\Contact\StoreContactRequest;
+use App\Services\SettingService;
 
 class ContactController extends Controller
 {
     protected $contactService;
-    public function __construct(ContactService $contactService)
-    {
+    protected $settingService;
+    public function __construct(
+        SettingService $settingService,
+        ContactService $contactService
+    ) {
         $this->contactService = $contactService;
-        // throw new \Exception('Not implemented');
+        $this->settingService = $settingService;
     }
     public function index(): View
     {
-        return view('client.pages.contact.index');
+        $settings = $this->settingService->show('publish', 1);
+        return view('client.pages.contact.index', compact(
+            'settings'
+        ));
     }
 
     public function send(StoreContactRequest $request)
