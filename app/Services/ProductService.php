@@ -9,22 +9,26 @@ use Illuminate\Http\Request;
 class ProductService extends BaseService
 {
     protected $repository;
-    protected $filterSearch = ['tensp'];
+    protected $filterSearch = ['name'];
     protected $relationFilter = [
         'categories' => 'category_id',
         'has_attribute' => 1,
     ];
     protected $complexFilter = [
-        ['sanpham_variants.giaban', '>=', 'min_price'],
-        ['sanpham_variants.giaban', '<=', 'max_price'],
+        ['product_variant.price', '>=', 'min_price'],
+        ['product_variant.price', '<=', 'max_price'],
     ];
-    protected $with = ['categories', 'thuonghieu', 'sanpham_variants'];
+    protected $with = ['categories', 'brand', 'product_variant'];
     public function __construct(
         ProductRepository $repository
     ) {
         $this->repository = $repository;
     }
-    protected function prepageModeldata(Request $request): self
+    protected function perpageModelData(Request $request): self
+    {
+        return $this->initialBasicData($request);
+    }
+    public function initialBasicData(Request $request)
     {
         $fillable = $this->repository->getFillable();
         $payload = $request->only($fillable);
@@ -49,23 +53,23 @@ class ProductService extends BaseService
     }
     private function handleProductVariants(Request $request)
     {
-        if (!$request->has('sanpham_variants') || !is_array($request->input('sanpham_variants'))) {
+        if (!$request->has('product_variant') || !is_array($request->input('product_variant'))) {
             return $this;
         };
         if (!$request->has_attribute || $request->has_attribute == 0) {
             // Tắt variants - xóa tất cả variants cũ
-            $this->model->sanpham_variants()->each(function ($variant) {
+            $this->model->product_variant()->each(function ($variant) {
                 $variant->attributesValues()->detach();
                 $variant->delete();
             });
             return $this;
         }
-        $existingVariantIds = $this->model->sanpham_variants()->pluck('id')->toArray();
+        $existingVariantIds = $this->model->product_variant()->pluck('id')->toArray();
         $submittedVariantIds = [];
-        $variantsData = $request->input('sanpham_variants');
+        $variantsData = $request->input('product_variant');
         $commonAlbum = $request->has('album') ? $request->input('album') : [];
         if (!is_array($variantsData) || empty($variantsData)) {
-            $this->model->sanpham_variants()->each(function ($variants) {
+            $this->model->product_variant()->each(function ($variants) {
                 $variants->attributesValues()->detach();
                 $variants->delete();
             });
@@ -74,8 +78,8 @@ class ProductService extends BaseService
         foreach ($variantsData as $variantData) {
             if (
                 !isset($variantData['sku']) ||
-                !isset($variantData['giaban']) ||
-                !isset($variantData['soluong']) ||
+                !isset($variantData['price']) ||
+                !isset($variantData['quantity']) ||
                 !isset($variantData['attributes'])
             ) {
                 continue;
@@ -88,13 +92,13 @@ class ProductService extends BaseService
             }
             $variantPayload = [
                 'sku' => $variantData['sku'],
-                'giaban' => $this->clearPrice($variantData['giaban']),
-                'soluong' => (int)($variantData['soluong'] ?? 0),
+                'price' => $this->clearPrice($variantData['price']),
+                'quantity' => (int)($variantData['quantity'] ?? 0),
                 'album' => $albumData,
-                'trangthai' => $request->trangthai ?? 1,
+                'publish' => $request->publish ?? 1,
             ];
             if (isset($variantData['id']) && !empty($variantData['id'])) {
-                $variant = $this->model->sanpham_variants()->find($variantData['id']);
+                $variant = $this->model->product_variant()->find($variantData['id']);
                 if ($variant) {
                     $variant->update($variantPayload);
                     if (isset($variantData['attributes']) && is_array($variantData['attributes'])) {
@@ -103,7 +107,7 @@ class ProductService extends BaseService
                     $submittedVariantIds[] = $variant->id;
                 }
             } else {
-                $variant = $this->model->sanpham_variants()->create($variantPayload);
+                $variant = $this->model->product_variant()->create($variantPayload);
                 // Xử lý attributes - attach từng cặp type_id và value_id
                 if (isset($variantData['attributes']) && is_array($variantData['attributes'])) {
                     $variant->attributesValues()->attach($variantData['attributes']);
@@ -115,7 +119,7 @@ class ProductService extends BaseService
         $variantsToDelete = array_diff($existingVariantIds, $submittedVariantIds);
         if (!empty($variantsToDelete)) {
             foreach ($variantsToDelete as $deleteId) {
-                $variantToDelete = $this->model->sanpham_variants()->find($deleteId);
+                $variantToDelete = $this->model->product_variant()->find($deleteId);
                 if ($variantToDelete) {
                     $variantToDelete->attributesValues()->detach();
                     $variantToDelete->delete();
@@ -127,8 +131,8 @@ class ProductService extends BaseService
     }
     private function updateTotalQuantity()
     {
-        $totalQuantity = $this->model->sanpham_variants()->sum('soluong');
-        $this->model->update(['soluong' => $totalQuantity]);
+        $totalQuantity = $this->model->product_variant()->sum('quantity');
+        $this->model->update(['quantity' => $totalQuantity]);
     }
     private function clearPrice($price)
     {

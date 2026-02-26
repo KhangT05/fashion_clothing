@@ -22,9 +22,9 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function variants(): BelongsTo
+    public function product_variant(): BelongsTo
     {
         return $this->belongsTo(ProductVariant::class, 'sku', 'sku');
     }
-    public $relationable = ['user', 'variants'];
+    public $relationable = ['user', 'product_variant'];
 }

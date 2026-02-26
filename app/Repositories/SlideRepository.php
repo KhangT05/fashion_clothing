@@ -12,20 +12,4 @@ class SlideRepository extends BaseRepository
     ) {
         $this->model = $model;
     }
-    public function delete($id)
-    {
-        $model = $this->model->find($id);
-        $model->update([
-            'trangthai' => 2,
-        ]);
-        return $model;
-    }
-    public function restore($id)
-    {
-        $model = $this->model->find($id);
-        $model->update([
-            'trangthai' => 1,
-        ]);
-        return $model;
-    }
 }

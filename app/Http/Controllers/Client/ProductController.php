@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Sanpham;
+use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-use App\Models\Binhluan;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -29,7 +29,7 @@ class ProductController extends Controller
     public function index(Request $request): View
     {
         $baseRequest = clone $request;
-        $query = Sanpham::query();
+        $query = Product::query();
 
         if ($request->filled('keyword')) {
             $query->where('tensp', 'LIKE', '%' . $request->keyword . '%');
@@ -62,7 +62,7 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Sanpham::where('slug', $slug)
+        $product = Product::where('slug', $slug)
             ->with([
                 'categories',
                 'thuonghieu',
@@ -124,7 +124,7 @@ class ProductController extends Controller
             ->map(fn($group) => $group->unique('id')->values());
 
         $categoryIds = $product->categories->pluck('id');
-        $relatedProducts = Sanpham::whereHas('categories', function ($q) use ($categoryIds) {
+        $relatedProducts = Product::whereHas('categories', function ($q) use ($categoryIds) {
             $q->whereIn('categories.id', $categoryIds);
         })
             ->where('id', '!=', $product->id)
@@ -157,7 +157,7 @@ class ProductController extends Controller
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để đánh giá!');
         }
 
-        $product = Sanpham::where('slug', $slug)->firstOrFail();
+        $product = Product::where('slug', $slug)->firstOrFail();
 
         $request->validate([
             'noidung' => 'required|string|max:500',
@@ -168,7 +168,7 @@ class ProductController extends Controller
             'danhgia.required' => 'Vui lòng chọn số sao đánh giá',
         ]);
 
-        $existingComment = Binhluan::where('user_id', Auth::id())
+        $existingComment = Comment::where('user_id', Auth::id())
             ->where('sanpham_id', $product->id)
             ->first();
 
@@ -176,7 +176,7 @@ class ProductController extends Controller
             return back()->with('error', 'Bạn đã đánh giá sản phẩm này rồi!');
         }
 
-        Binhluan::create([
+        Comment::create([
             'user_id' => Auth::id(),
             'sanpham_id' => $product->id,
             'noidung' => $request->noidung,

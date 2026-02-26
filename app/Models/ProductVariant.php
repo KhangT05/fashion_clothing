@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ProductVariant extends Model
 {
-    public $relationable = ['attribute_categories'];
+    public $relationable = ['product_variant_attribute'];
     protected $fillable = [
         'product_id',
         'sku',
@@ -17,7 +17,7 @@ class ProductVariant extends Model
         'publish',
         'album'
     ];
-    public function attribute_categories(): BelongsToMany
+    public function product_variant_attribute(): BelongsToMany
     {
         return $this->belongsToMany(
             AttributeCategory::class,

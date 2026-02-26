@@ -14,8 +14,15 @@ class SettingService extends BaseService
     ) {
         $this->repository = $repository;
     }
-    protected function prepageModeldata(Request $request): self
+    protected function perpageModelData(Request $request): self
     {
+        return $this->initialBasicData($request);
+    }
+    public function initialBasicData(Request $request)
+    {
+        $fillable = $this->repository->getFillable();
+        $payload = $request->only($fillable);
+        $this->modelData = $payload;
         return $this;
     }
 }

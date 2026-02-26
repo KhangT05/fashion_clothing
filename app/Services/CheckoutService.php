@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Services\BaseService;
-use App\Repositories\Order\OrderRepository;
+use App\Repositories\OrderRepository;
 
 use Illuminate\Http\Request;
 
@@ -15,13 +15,17 @@ class CheckoutService extends BaseService
     ) {
         $this->repository = $repository;
     }
-    protected function prepageModeldata(Request $request): self
+    protected function perpageModelData(Request $request): self
+    {
+        return $this->initialBasicData($request);
+    }
+    public function initialBasicData(Request $request)
     {
         $fillable = $this->repository->getFillable();
         $payload = $request->only($fillable);
         if ($request->has('checkout')) {
             $checkout = $request->input('checkout');
-            $payload['thanhtien'] = $checkout['finalPrice'] ?? $checkout['totalPrice'] ?? 0;
+            $payload['total_amount'] = $checkout['finalPrice'] ?? $checkout['totalPrice'] ?? 0;
         }
         $this->modelData = $payload;
         return $this;
@@ -53,12 +57,12 @@ class CheckoutService extends BaseService
                 ...$ct_hoadonData,
                 'sanpham_id' => $ct_hoadonData['product_id'],
                 'sku' => $ct_hoadonData['sku'] ?? '',
-                'name' => $ct_hoadonData['ten'],
-                'dongia' => $ct_hoadonData['gia_goc'],
-                'soluong' => $ct_hoadonData['so_luong'],
+                'name' => $ct_hoadonData['name'],
+                'price' => $ct_hoadonData['gia_goc'],
+                'quantity' => $ct_hoadonData['so_luong'],
                 'discount' => $ct_hoadonData['discount'] ?? 0,
-                'thanhtien' => $ct_hoadonData['thanh_tien'],
-                'trangthai' => 3,
+                'total_amount' => $ct_hoadonData['thanh_tien'],
+                'publish' => 3,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Cart\CheckQuantityRequest;
-use App\Models\Giohang;
+use App\Models\Cart;
 use App\Models\SanphamVariant;
 use App\Repositories\CartRepository;
 use App\Repositories\ProductRepository;
@@ -69,7 +69,7 @@ class CartController extends Controller
         }
         // dd($variant);
         // Tìm hoặc tạo item trong giỏ hàng
-        $item = Giohang::where('user_id', $user->id)
+        $item = Cart::where('user_id', $user->id)
             ->where('sku', $request->sku)
             ->first();
         if ($item) {
@@ -90,14 +90,14 @@ class CartController extends Controller
                     'message' => 'Vượt quá số lượng tồn kho (Còn lại: ' . $variant->soluong . ')'
                 ], 422);
             }
-            Giohang::create([
+            Cart::create([
                 'user_id' => $user->id,
                 'sku' => $request->sku,
                 'soluong' => $request->soluong, // Lưu giá bán hiện tại
             ]);
         }
         // Tính tổng số lượng trong giỏ hàng
-        $cartCount = Giohang::where('user_id', $user->id)->sum('soluong');
+        $cartCount = Cart::where('user_id', $user->id)->sum('soluong');
         return response()->json([
             'success' => true,
             'message' => 'Đã thêm vào giỏ hàng!',

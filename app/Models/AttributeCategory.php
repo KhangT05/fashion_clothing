@@ -18,7 +18,7 @@ class AttributeCategory extends Model
     {
         return $this->BelongsTo(Attributes::class, 'attribute_id');
     }
-    public function attributeType(): BelongsToMany
+    public function attribute_category(): BelongsToMany
     {
         return $this->belongsToMany(
             ProductVariant::class,

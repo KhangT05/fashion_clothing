@@ -74,10 +74,6 @@ abstract class BaseRepository
     {
         return $this->model->getFillable();
     }
-    public function getTrangThai()
-    {
-        return $this->model->where('trangthai', 1)->get();
-    }
     public function getRelationable()
     {
         return $this->model->relationable;

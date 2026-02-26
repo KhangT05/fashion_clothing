@@ -2,16 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Sanpham;
-use App\Models\Hoadon;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class StatisticRepository extends BaseRepository
 {
-    public function __construct(Hoadon $model)
+    public function __construct(Order $model)
     {
         $this->model = $model;
     }
@@ -21,14 +20,12 @@ class StatisticRepository extends BaseRepository
     {
         return [
             'users' => User::count(),
-            'products' => Sanpham::count(),
+            'products' => Product::count(),
             'orders' => $this->model->count(),
-
-            // SỬA: Join sang ct_hoadon để tính tổng tiền
             'revenue' => $this->model
-                ->join('ct_hoadon', 'hoadon.id', '=', 'ct_hoadon.hoadon_id')
-                ->where('hoadon.trangthai', 4) // Giả sử 4 là trạng thái hoàn thành
-                ->sum('ct_hoadon.thanhtien')
+                ->join('order_detail', 'order.id', '=', 'order_detail.order_id')
+                ->where('order.publish', 4) // Giả sử 4 là trạng thái hoàn thành
+                ->sum('order_detail.total_amount')
         ];
     }
 
@@ -36,18 +33,18 @@ class StatisticRepository extends BaseRepository
     public function getRevenueChartData()
     {
         return $this->model
-            ->join('ct_hoadon', 'hoadon.id', '=', 'ct_hoadon.hoadon_id') // <--- QUAN TRỌNG: Phải Join bảng
+            ->join('order_detail', 'order.id', '=', 'order_detail.order_id') // <--- QUAN TRỌNG: Phải Join bảng
             ->select(
-                DB::raw('DATE(hoadon.created_at) as date'),
+                DB::raw('DATE(order.created_at) as date'),
 
-                // SỬA: Tính tổng tiền từ bảng chi tiết (ct_hoadon.thanhtien)
-                DB::raw('SUM(ct_hoadon.thanhtien) as total_money'),
+                // SỬA: Tính tổng tiền từ bảng chi tiết (order_detail.total_amount)
+                DB::raw('SUM(order_detail.total_amount) as total_money'),
 
                 // SỬA: Đếm số đơn hàng duy nhất (tránh đếm trùng do Join)
-                DB::raw('COUNT(DISTINCT hoadon.id) as total_orders')
+                DB::raw('COUNT(DISTINCT order.id) as total_orders')
             )
-            ->where('hoadon.trangthai', 4) // Chỉ tính đơn thành công
-            ->where('hoadon.created_at', '>=', Carbon::now()->subDays(30))
+            ->where('order.publish', 4) // Chỉ tính đơn thành công
+            ->where('order.created_at', '>=', Carbon::now()->subDays(30))
             ->groupBy('date')
             ->orderBy('date', 'ASC')
             ->get();

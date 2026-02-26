@@ -2,31 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\LienHe;
+use App\Models\Contact;
 
 class ContactRepository extends BaseRepository
 {
-    public function __construct(LienHe $model)
+    public function __construct(Contact $model)
     {
         $this->model = $model;
     }
-
-    public function filter(array $filter){
-        return $this->model->where('trangthai',$filter['status'])
-                           ->orderBy('created_at',$filter['sort'])
-                           ->paginate(15);                      
-    }
-
-
-    public function updateContact($id){
-        return LienHe::where('id', $id)->update([
-            'trangthai' => 2
-        ]);
-    }
-    public function destroyContact($id){
-        return LienHe::where('id', $id)->update([
-            'trangthai' => 0
-        ]);
-    }
-
 }
