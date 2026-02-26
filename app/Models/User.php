@@ -3,30 +3,38 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Trait\HasQuery;
+use App\Trait\HasTransaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasTransaction, HasQuery;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Những cột được phép thêm/sửa vào database
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role_id',
+        'province_id',
+        'ward_id',
+        'phone',    // Cột bạn thêm
+        'publish',  // Cột bạn thêm (1: Active, 0: Block)
+        'address',  // Nếu có
+        'avatar',   // Nếu có
+        'email_verified_at'
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Những cột bị ẩn khi trả về API/Json
      */
     protected $hidden = [
         'password',
@@ -34,35 +42,25 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Định dạng dữ liệu
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    public function cart()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Cart::class);
     }
-    // Rest omitted for brevity
-
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
+    public function role(): HasOne
     {
-        return $this->getKey();
+        return $this->hasOne(Role::class);
     }
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
+    public function wishlist()
     {
-        return [];
+        // Quan hệ Nhiều - Nhiều với bảng Sanpham thông qua bảng trung gian 'yeuthich'
+        return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id')
+            ->withTimestamps();
     }
+    public $relationable = [];
 }

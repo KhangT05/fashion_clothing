@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('product_attribute_variants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('variant_id')->constrained('product_variants')->cascadeOnDelete();
+            $table->foreignId('product_variant_id')->constrained('product_variants')->cascadeOnDelete();
             $table->foreignId('attribute_category_id')->constrained('attribute_categories')->cascadeOnDelete();
             $table->timestamps();
-            $table->unique(['variant_id', 'attribute_category_id']);
+            $table->unique(
+                ['product_variant_id', 'attribute_category_id'],
+                'pav_unique'
+            );
         });
     }
 

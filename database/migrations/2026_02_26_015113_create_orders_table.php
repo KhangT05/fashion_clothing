@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone', 20);
             $table->text('address');
-            $table->string('published')->default('pending');
+            $table->string('publish')->default('pending');
             $table->string('payment_methoad')->default('cod');
             // Trạng thái thanh toán
             $table->string('payment_status')->default('unpaid');

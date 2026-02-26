@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->text('content');
-            $table->tinyInteger('published')->default(1);
+            $table->tinyInteger('publish')->default(1);
             $table->tinyInteger('star')->default(0);
             $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
             $table->timestamps();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('total_amount', 15, 2);
             $table->decimal('price', 15, 2);
             $table->integer('quantity');
-            $table->tinyInteger('published')->default(1);
+            $table->tinyInteger('publish')->default(1);
             $table->string('sku')->nullable();
             $table->decimal('discount', 15, 2);
             $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
