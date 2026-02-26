@@ -21,8 +21,7 @@ class CategoryController extends Controller
 
     public function index(Request $request): View //Lấy danh sách danh mục
     {
-        $keyword = trim($request->get('keyword'));
-        $categories = $this->categoryService->search($keyword);
+        $categories = $this->categoryService->show('publish', 1);
         return view('server.pages.categories.index', compact('categories'));
     }
     public function create(): View // Lấy view thêm mới
@@ -38,19 +37,19 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request) // Lưu danh mục mới
     {
-        $category = $this->categoryService->createCategory($request);
+        $category = $this->categoryService->save($request);
         return redirect()->route('categories.index')->with('success', 'Thêm danh mục thành công');
     }
 
     public function update(UpdateCategoryRequest $request, $id) //Lưu danh mục được cập nhật
     {
-        $this->categoryService->updateCategory($id, $request);
+        $this->categoryService->save($request, $id);
         return redirect()->route('categories.index')->with('success', 'Cập nhật danh mục thành công');
     }
 
     public function destroy($id) //Xóa danh mục
     {
-        $category = $this->categoryService->destroy($id);
+        $category = $this->categoryService->delete($id);
         return redirect()->back()->with('success', 'Xóa danh mục thành công');
     }
 }

@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\Cart\CheckQuantityRequest;
 use App\Models\Cart;
-use App\Models\SanphamVariant;
-use App\Repositories\CartRepository;
+use App\Models\ProductVariant;
 use App\Repositories\ProductRepository;
 use Illuminate\View\View;
 use App\Services\CartService;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Sanpham;
+use App\Repositories\CartRepository;
 
 class CartController extends Controller
 {
@@ -55,12 +53,12 @@ class CartController extends Controller
     {
         $request->validate([
             'sku' => 'required|string',
-            'soluong' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1',
         ]);
         $user = Auth::user();
         // Tìm variant theo SKU
         $sku = trim($request->sku);
-        $variant = SanphamVariant::where('sku', $sku)->first();
+        $variant = ProductVariant::where('sku', $sku)->first();
         if (!$variant) {
             return response()->json([
                 'success' => false,
@@ -74,30 +72,30 @@ class CartController extends Controller
             ->first();
         if ($item) {
             // Kiểm tra tồn kho trước khi tăng
-            if ($item->soluong + $request->soluong > $variant->soluong) {
+            if ($item->quantity + $request->quantity > $variant->quantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Vượt quá số lượng tồn kho (Còn lại: ' . $variant->soluong . ')'
+                    'message' => 'Vượt quá số lượng tồn kho (Còn lại: ' . $variant->quantity . ')'
                 ], 422);
             }
             // Tăng số lượng
-            $item->increment('soluong', $request->soluong);
+            $item->increment('quantity', $request->quantity);
         } else {
             // Tạo mới
-            if ($request->soluong > $variant->soluong) {
+            if ($request->quantity > $variant->quantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Vượt quá số lượng tồn kho (Còn lại: ' . $variant->soluong . ')'
+                    'message' => 'Vượt quá số lượng tồn kho (Còn lại: ' . $variant->quantity . ')'
                 ], 422);
             }
             Cart::create([
                 'user_id' => $user->id,
                 'sku' => $request->sku,
-                'soluong' => $request->soluong, // Lưu giá bán hiện tại
+                'quantity' => $request->quantity, // Lưu giá bán hiện tại
             ]);
         }
         // Tính tổng số lượng trong giỏ hàng
-        $cartCount = Cart::where('user_id', $user->id)->sum('soluong');
+        $cartCount = Cart::where('user_id', $user->id)->sum('quantity');
         return response()->json([
             'success' => true,
             'message' => 'Đã thêm vào giỏ hàng!',

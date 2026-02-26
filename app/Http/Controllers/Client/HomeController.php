@@ -38,7 +38,7 @@ class HomeController extends Controller
         ]));
         $sanphamRequest = new request();
         $sanphamRequest->merge([
-            'trangthai' => 1,
+            'publish' => 1,
         ]);
         $sanpham = $this->productService->pagination($sanphamRequest);
         $sanphamMoiRequest = clone $request;
@@ -48,7 +48,7 @@ class HomeController extends Controller
         ]);
         $sanphamMoi = $this->productService->pagination($sanphamMoiRequest);
         // dd($sanphamMoi);
-        Log::debug('Has trangthai?', [$sanphamMoiRequest->has('trangthai')]);
+        Log::debug('Has publish?', [$sanphamMoiRequest->has('publish')]);
         return view('client.pages.home', compact(
             'slide',
             'sanphamMoi',
@@ -71,7 +71,7 @@ class HomeController extends Controller
     {
         $request->merge([
             'sort' => 'created_at,desc',
-            'trangthai' => 1
+            'publish' => 1
         ]);
         $products = $this->productService->pagination($request);
         return view('client.pages.products.new', compact(

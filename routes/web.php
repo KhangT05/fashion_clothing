@@ -5,20 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\Auth\AuthController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
-
-
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ProfileController;
-// Them class checkout
 use App\Http\Controllers\Client\CheckoutController;
-
 use App\Http\Controllers\Server\CategoryController;
 use App\Http\Controllers\Server\DashboardServerController;
 use App\Http\Controllers\Server\UserController;
 use App\Http\Controllers\Server\ProductController;
 use App\Http\Controllers\Server\BrandController;
 use App\Http\Controllers\Server\ServerOrderController;
-use App\Http\Controllers\Server\VariantController;
 use App\Http\Controllers\Server\ContactController;
 use App\Http\Controllers\Server\SlideController;
 use App\Http\Controllers\Client\HomeController;
@@ -189,10 +184,6 @@ Route::prefix('/server')->middleware(['auth', 'role:2,3'])
             // Tên route: .update
             Route::post('update/{id}', [ServerOrderController::class, 'update'])->name('.update');
         });
-        // =================VARIANT================//
-        Route::prefix('/variants')->group(function () {
-            Route::get('index', [VariantController::class, 'index'])->name('variants.index');
-        });
         // =================CONTACT================//
         Route::prefix('/contacts')->name('contacts')->group(function () {
             Route::get('index', [ContactController::class, 'index'])->name('.index');
@@ -210,7 +201,16 @@ Route::prefix('/server')->middleware(['auth', 'role:2,3'])
             Route::delete('delete/{id}', [SlideController::class, 'delete'])->name('.delete');
             Route::put('restore/{id}', [SlideController::class, 'restore'])->name('.restore');
         });
-
+        Route::prefix('/attribute')->name('attribute')->group(function () {
+            Route::get('index', [SlideController::class, 'index'])->name('.index');
+            Route::get('create', [SlideController::class, 'create'])->name('.create');
+            Route::post('store', [SlideController::class, 'store'])->name('.store');
+            Route::get('show/{id}', [SlideController::class, 'show'])->name('.show');
+            Route::get('edit/{id}', [SlideController::class, 'edit'])->name('.edit');
+            Route::put('update/{id}', [SlideController::class, 'update'])->name('.update');
+            Route::delete('delete/{id}', [SlideController::class, 'delete'])->name('.delete');
+            Route::put('restore/{id}', [SlideController::class, 'restore'])->name('.restore');
+        });
         Route::prefix('/comment')->name('comment')->group(function () {
             Route::get('index', [CommentController::class, 'index'])->name('.index');
             Route::delete('delete/{id}', [CommentController::class, 'delete'])->name('.delete');

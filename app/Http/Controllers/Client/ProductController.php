@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
@@ -11,51 +10,29 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use App\Models\Comment;
+use App\Services\CommentService;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     protected $productService;
     protected $categoryService;
+    protected $commentService;
 
     public function __construct(
         ProductService $productService,
-        CategoryService $categoryService
+        CategoryService $categoryService,
+        CommentService $commentService
     ) {
         $this->productService  = $productService;
         $this->categoryService = $categoryService;
+        $this->commentService = $commentService;
     }
 
     public function index(Request $request): View
     {
-        $baseRequest = clone $request;
-        $query = Product::query();
-
-        if ($request->filled('keyword')) {
-            $query->where('tensp', 'LIKE', '%' . $request->keyword . '%');
-        }
-
-        if ($request->filled('category_id')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('categories.id', $request->category_id);
-            });
-        }
-
-        if ($request->filled('min_price')) {
-            $query->whereHas('sanpham_variants', function ($q) use ($request) {
-                $q->where('giaban', '>=', $request->min_price);
-            });
-        }
-
-        if ($request->filled('max_price')) {
-            $query->whereHas('sanpham_variants', function ($q) use ($request) {
-                $q->where('giaban', '<=', $request->max_price);
-            });
-        }
-
-        $query->with(['categories', 'thuonghieu', 'sanpham_variants']);
-        $product = $query->paginate(20)->withQueryString();
-        $categories = Category::where('publish', 1)->get();
+        $product = $this->productService->pagination($request);
+        $categories = $this->categoryService->show('publish', 1);
 
         return view('client.pages.products.index', compact('product', 'categories'));
     }
@@ -65,20 +42,20 @@ class ProductController extends Controller
         $product = Product::where('slug', $slug)
             ->with([
                 'categories',
-                'thuonghieu',
-                'sanpham_variants.attributesValues.attributeType',
-                'binhluan' => function ($query) {
-                    $query->where('trangthai', 1)
+                'brand',
+                'product_variant.product_variant_attribute.variant_attribute_values',
+                'comment' => function ($query) {
+                    $query->where('publish', 1)
                         ->with('user')
                         ->orderBy('created_at', 'desc');
                 }
             ])
-            ->withCount(['binhluan' => function ($query) {
-                $query->where('trangthai', 1);
+            ->withCount(['comment' => function ($query) {
+                $query->where('publish', 1);
             }])
-            ->withAvg(['binhluan' => function ($query) {
-                $query->where('trangthai', 1);
-            }], 'danhgia')
+            ->withAvg(['comment' => function ($query) {
+                $query->where('publish', 1);
+            }], 'star')
             ->firstOrFail();
 
         $product->increment('view');
@@ -86,28 +63,28 @@ class ProductController extends Controller
         $hasPurchased = false;
 
         if (Auth::check()) {
-            $hasPurchased = DB::table('hoadon')
-                ->join('ct_hoadon', 'hoadon.id', '=', 'ct_hoadon.hoadon_id')
-                ->where('hoadon.user_id', Auth::id())
-                ->where('ct_hoadon.sanpham_id', $product->id)
+            $hasPurchased = DB::table('order')
+                ->join('order_detail', 'order.id', '=', 'order_detail.order_id')
+                ->where('order.user_id', Auth::id())
+                ->where('order_detail.product_id', $product->id)
                 ->exists();
         }
 
         $isWishlisted = false;
         if (Auth::check()) {
-            $isWishlisted = DB::table('yeuthich')
+            $isWishlisted = DB::table('wishlist')
                 ->where('user_id', Auth::id())
-                ->where('sanpham_id', $product->id)
+                ->where('product_id', $product->id)
                 ->exists();
         }
 
-        $wishlistCount = DB::table('yeuthich')
-            ->where('sanpham_id', $product->id)
+        $wishlistCount = DB::table('wishlist')
+            ->where('product_id', $product->id)
             ->count();
 
-        $defaultVariant = $product->sanpham_variants->first();
+        $defaultVariant = $product->product_variant->first();
 
-        $albumImages = $product->sanpham_variants
+        $albumImages = $product->product_variant
             ->pluck('album')
             ->filter()
             ->flatMap(function ($album) {
@@ -116,7 +93,7 @@ class ProductController extends Controller
             ->unique()
             ->values();
 
-        $groupedAttributes = $product->sanpham_variants
+        $groupedAttributes = $product->product_variant
             ->flatMap->attributesValues
             ->groupBy(function ($item) {
                 return optional($item->attributeType->first())->name;
@@ -128,14 +105,14 @@ class ProductController extends Controller
             $q->whereIn('categories.id', $categoryIds);
         })
             ->where('id', '!=', $product->id)
-            ->where('trangthai', 1)
-            ->withAvg('binhluan', 'danhgia')
-            ->with('sanpham_variants')
+            ->where('publish', 1)
+            ->withAvg('comment', 'star')
+            ->with('product_variant')
             ->take(10)
             ->get();
 
-        $averageRating = round($product->binhluan_avg_danhgia ?? 0, 1);
-        $ratingCount = $product->binhluan_count ?? 0;
+        $averageRating = round($product->comment_avg_star ?? 0, 1);
+        $ratingCount = $product->comment_count ?? 0;
 
         return view('client.pages.products.show', compact(
             'product',
@@ -156,37 +133,11 @@ class ProductController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để đánh giá!');
         }
-
         $product = Product::where('slug', $slug)->firstOrFail();
-
-        $request->validate([
-            'noidung' => 'required|string|max:500',
-            'danhgia' => 'required|integer|min:1|max:5',
-        ], [
-            'noidung.required' => 'Vui lòng nhập nội dung đánh giá',
-            'noidung.max' => 'Nội dung không được quá 500 ký tự',
-            'danhgia.required' => 'Vui lòng chọn số sao đánh giá',
-        ]);
-
-        $existingComment = Comment::where('user_id', Auth::id())
-            ->where('sanpham_id', $product->id)
-            ->first();
-
-        if ($existingComment) {
-            return back()->with('error', 'Bạn đã đánh giá sản phẩm này rồi!');
-        }
-
-        Comment::create([
-            'user_id' => Auth::id(),
-            'sanpham_id' => $product->id,
-            'noidung' => $request->noidung,
-            'danhgia' => $request->danhgia,
-            'trangthai' => 1,
-        ]);
-
+        $this->commentService->save($request);
         return back()->with('success', 'Cảm ơn bạn đã đánh giá sản phẩm!');
     }
-    public function toggleWishlist($productId)
+    public function toggleWishlist($id)
     {
         if (!Auth::check()) {
             return response()->json([
@@ -195,7 +146,7 @@ class ProductController extends Controller
                 'redirect' => route('login')
             ], 401);
         }
-        $productExists = DB::table('sanpham')->where('id', $productId)->exists();
+        $productExists = $this->productService->findById($id);
         if (!$productExists) {
             return response()->json([
                 'success' => false,
@@ -203,23 +154,23 @@ class ProductController extends Controller
             ], 404);
         }
 
-        $exists = DB::table('yeuthich')
+        $exists = DB::table('wishlist')
             ->where('user_id', Auth::id())
-            ->where('sanpham_id', $productId)
+            ->where('product_id', $id)
             ->exists();
 
         if ($exists) {
-            DB::table('yeuthich')
+            DB::table('wishlist')
                 ->where('user_id', Auth::id())
-                ->where('sanpham_id', $productId)
+                ->where('product_id', $id)
                 ->delete();
 
             $message = 'Đã xóa khỏi danh sách yêu thích';
             $action = 'removed';
         } else {
-            DB::table('yeuthich')->insert([
+            DB::table('wishlist')->insert([
                 'user_id' => Auth::id(),
-                'sanpham_id' => $productId,
+                'product_id' => $id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -228,8 +179,8 @@ class ProductController extends Controller
             $action = 'added';
         }
 
-        $wishlistCount = DB::table('yeuthich')
-            ->where('sanpham_id', $productId)
+        $wishlistCount = DB::table('wishlist')
+            ->where('product_id', $id)
             ->count();
 
         return response()->json([
@@ -244,7 +195,7 @@ class ProductController extends Controller
     {
         $variantId = $request->variant_id;
 
-        $variant = DB::table('sanpham_variants')
+        $variant = DB::table('product_variant')
             ->where('id', $variantId)
             ->first();
 
@@ -259,9 +210,9 @@ class ProductController extends Controller
             'success' => true,
             'data' => [
                 'sku' => $variant->sku,
-                'giaban' => $variant->giaban,
-                'soluong' => $variant->soluong,
-                'trangthai' => $variant->soluong > 0 ? 'Còn hàng' : 'Hết hàng'
+                'price' => $variant->price,
+                'quantity' => $variant->quantity,
+                'publish' => $variant->quantity > 0 ? 'Còn hàng' : 'Hết hàng'
             ]
         ]);
     }

@@ -20,22 +20,18 @@ class BientheController extends Controller
     public function index(Request $request): View
     {
         $attributes = $this->attributeService->pagination($request);
-        return view('server.pages.attributes.index', compact(
+        return view('server.pages.attribute.index', compact(
             'attributes'
         ));
     }
     public function create(): View
     {
-        return view('server.pages.Attributes.save');
+        return view('server.pages.attribute.save');
     }
     public function store(StoreAttributeRequest $request)
     {
         $attributes = $this->attributeService->save($request);
-        // dd($Attribute);
-        // if($result['success']){
-
-        // }
-        return redirect()->route('attributes.index')->with('success', 'Tạo vai trò mới thành công');
+        return redirect()->route('attribute.index')->with('success', 'Tạo vai trò mới thành công');
     }
     public function show($id)
     {
@@ -44,28 +40,28 @@ class BientheController extends Controller
     public function edit($id): View
     {
         $attributes = $this->attributeService->findById($id);
-        return view('server.pages.attributes.update', compact(
+        return view('server.pages.attribute.update', compact(
             'attributes'
         ));
     }
     public function update(UpdateAttributeRequest $request, $id)
     {
         $this->attributeService->save($request, $id);
-        return redirect()->route('attributes.index')->with('success', 'Cập nhật vai trò thành công');
+        return redirect()->route('attribute.index')->with('success', 'Cập nhật vai trò thành công');
     }
     public function delete($id)
     {
         $result = $this->attributeService->trash($id);
-        return redirect()->route('attributes.index')->with('success', 'Xóa record thành công');
+        return redirect()->route('attribute.index')->with('success', 'Xóa record thành công');
     }
     public function restore($id)
     {
         $result = $this->attributeService->delete($id);
-        return redirect()->route('attributes.index')->with('success', 'Khôi phục record thành công');
+        return redirect()->route('attribute.index')->with('success', 'Khôi phục record thành công');
     }
     public function trash($id)
     {
         $result = $this->attributeService->trash($id);
-        return redirect()->route('attributes.index')->with('success', 'Xóa record thành công');
+        return redirect()->route('attribute.index')->with('success', 'Xóa record thành công');
     }
 }
