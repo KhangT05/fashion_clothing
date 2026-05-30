@@ -48,18 +48,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function cart()
+    public function CartItems()
     {
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Giohang::class);
     }
     public function role(): HasOne
     {
         return $this->hasOne(Role::class);
     }
-    public function wishlist()
+    public function yeuthich()
     {
         // Quan hệ Nhiều - Nhiều với bảng Sanpham thông qua bảng trung gian 'yeuthich'
-        return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id')
+        return $this->belongsToMany(Sanpham::class, 'yeuthich', 'user_id', 'sanpham_id')
             ->withTimestamps();
     }
     public $relationable = [];

@@ -14,11 +14,7 @@ class SlideService extends BaseService
     ) {
         $this->repository = $repository;
     }
-    protected function perpageModelData(Request $request): self
-    {
-        return $this->initialBasicData($request);
-    }
-    public function initialBasicData(Request $request)
+    protected function prepageModeldata(Request $request): self
     {
         $fillable = $this->repository->getFillable();
         $payload = $request->only($fillable);

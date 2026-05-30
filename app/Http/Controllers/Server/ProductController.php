@@ -5,35 +5,35 @@ namespace App\Http\Controllers\Server;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Server\Product\StoreProductRequest;
 use App\Http\Requests\Server\Product\UpdateProductRequest;
-use App\Models\Attributes;
 use App\Models\Category;
 use App\Repositories\ProductRepository;
+use App\Services\BienTheService;
 use App\Services\CategoryService;
 use Illuminate\View\View;
 use App\Services\ProductService;
+use App\Services\ThuongHieuService;
 use Illuminate\Http\Request;
-use App\Services\AttributeService;
-use App\Services\BrandService;
+use App\Models\BienThe;
 
 class ProductController extends Controller
 {
     protected $productService;
     protected $categoryService;
-    protected $attributeService;
-    protected $brandService;
+    protected $bientheService;
+    protected $thuonghieuService;
     protected $productRepository;
     public function __construct(
         ProductRepository $productRepository,
         ProductService $productService,
         CategoryService $categoryService,
-        AttributeService $attributeService,
-        BrandService $brandService,
+        BienTheService $bientheService,
+        ThuongHieuService $thuonghieuService,
     ) {
         $this->productRepository = $productRepository;
         $this->productService = $productService;
         $this->categoryService = $categoryService;
-        $this->attributeService = $attributeService;
-        $this->brandService = $brandService;
+        $this->bientheService = $bientheService;
+        $this->thuonghieuService = $thuonghieuService;
     }
     public function index(Request $request): View
     {
@@ -44,7 +44,7 @@ class ProductController extends Controller
     }
     public function show()
     {
-        $products = $this->productService->show('publish', 1);
+        $products = $this->productRepository->getTrangThai();
         // dd($products);
         return view('server.pages.products.show', compact(
             'products'
@@ -52,22 +52,22 @@ class ProductController extends Controller
     }
     public function create(): View
     {
-        $categories =  $this->categoryService->show('publish', 1);
-        $brand = $this->brandService->show('publish', 1);
+        $categories = Category::where('publish', 1)->get();
+        $thuonghieu = $this->thuonghieuService->getTrangThai();
         $sku = 'SP' . time() . rand(1, 1000);
-        $attribute = Attributes::with(['attribute_category' => function ($query) {
+        $bienthe = BienThe::with(['bienthe_values' => function ($query) {
             $query
-                ->where('publish', 1)
+                ->where('trangthai', 1)
                 ->orderBy('value', 'asc');
         }])
-            ->where('publish', 1)
+            ->where('trangthai', 1)
             ->orderBy('type')
             ->get();
         return view('server.pages.products.save', compact(
             'sku',
             'categories',
-            'brand',
-            'attribute'
+            'thuonghieu',
+            'bienthe'
         ));
     }
     public function store(StoreProductRequest $request)
@@ -79,25 +79,25 @@ class ProductController extends Controller
     {
         $products = $this->productRepository->findById($id, [
             'categories',
-            'brand',
-            'product_variant.product_variant_attribute:id,value,attribute_id'
+            'thuonghieu',
+            'sanpham_variants.attributesValues:id,value,bienthe_id'
         ]);
-        $attribute = Attributes::with(['attribute_category' => function ($query) {
+        $bienthe = BienThe::with(['bienthe_values' => function ($query) {
             $query
-                ->where('publish', 1)
+                ->where('trangthai', 1)
                 ->orderBy('value', 'asc');
         }])
-            ->where('publish', 1)
+            ->where('trangthai', 1)
             ->orderBy('type')
             ->get();
-        $categories = $this->categoryService->show('publish', 1);
-        $brand = $this->brandService->show('publish', 1);
+        $categories = $this->categoryService->getTrangThai();
+        $thuonghieu = $this->thuonghieuService->getTrangThai();
         // dd($products);
         return view('server.pages.products.update', compact(
             'products',
             'categories',
-            'brand',
-            'attribute',
+            'thuonghieu',
+            'bienthe',
         ));
     }
     public function update(UpdateProductRequest $request, $id)

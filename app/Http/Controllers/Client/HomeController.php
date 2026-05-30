@@ -34,11 +34,11 @@ class HomeController extends Controller
         $sliderequest = new request();
         $slide = $this->slideService->pagination($sliderequest->merge([
             'type' => 'all',
-            'sort' => 'order,asc',
+            'sort' => 'stt,asc',
         ]));
         $sanphamRequest = new request();
         $sanphamRequest->merge([
-            'publish' => 1,
+            'trangthai' => 1,
         ]);
         $sanpham = $this->productService->pagination($sanphamRequest);
         $sanphamMoiRequest = clone $request;
@@ -48,7 +48,7 @@ class HomeController extends Controller
         ]);
         $sanphamMoi = $this->productService->pagination($sanphamMoiRequest);
         // dd($sanphamMoi);
-        Log::debug('Has publish?', [$sanphamMoiRequest->has('publish')]);
+        Log::debug('Has trangthai?', [$sanphamMoiRequest->has('trangthai')]);
         return view('client.pages.home', compact(
             'slide',
             'sanphamMoi',
@@ -71,7 +71,7 @@ class HomeController extends Controller
     {
         $request->merge([
             'sort' => 'created_at,desc',
-            'publish' => 1
+            'trangthai' => 1
         ]);
         $products = $this->productService->pagination($request);
         return view('client.pages.products.new', compact(

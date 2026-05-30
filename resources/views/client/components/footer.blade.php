@@ -1,94 +1,92 @@
-<div class="footer-top-area">
-    <div class="zigzag-bottom"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="footer-about-us">
-                    <h4>{{ $setting->name }}</h4>
-                    <p>{{ $setting->phone }}</p>
-                    <p>{{ $setting->email }}</p>
-                    <p>{{ $setting->description }}</p>
-                    <div class="footer-social">
-                        <a href="{{ $setting->facebook_url }}" target="_blank">
-                            <i class="fa-brands fa-facebook"></i>
+<footer class="bg-gray-900 text-gray-300 py-12 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+            {{-- About Section --}}
+            <div>
+                <h3 class="text-white font-bold text-lg mb-4">{{ $setting->name ?? 'eShop' }}</h3>
+                <p class="text-sm mb-2">{{ $setting->phone ?? '+1 234 567 890' }}</p>
+                <p class="text-sm mb-2">{{ $setting->email ?? 'info@eshop.com' }}</p>
+                <p class="text-sm mb-4">{{ $setting->description ?? 'Your trusted online shopping destination' }}</p>
+                <div class="flex gap-4">
+                    @if ($setting->facebook_url ?? null)
+                        <a href="{{ $setting->facebook_url }}" target="_blank" class="text-gray-400 hover:text-blue-500 transition">
+                            <i class="fa-brands fa-facebook text-xl"></i>
                         </a>
-                        <a href="{{ $setting->youtube_url }}" target="_blank">
-                            <i class="fa-brands fa-youtube"></i>
+                    @endif
+                    @if ($setting->youtube_url ?? null)
+                        <a href="{{ $setting->youtube_url }}" target="_blank" class="text-gray-400 hover:text-red-500 transition">
+                            <i class="fa-brands fa-youtube text-xl"></i>
                         </a>
-                        <a href="{{ $setting->instagram_url }}" target="_blank">
-                            <i class="fa-brands fa-instagram"></i>
+                    @endif
+                    @if ($setting->instagram_url ?? null)
+                        <a href="{{ $setting->instagram_url }}" target="_blank" class="text-gray-400 hover:text-pink-500 transition">
+                            <i class="fa-brands fa-instagram text-xl"></i>
                         </a>
-                        <a href="{{ $setting->linkedin_url }}" target="_blank">
-                            <i class="fa-brands fa-linkedin"></i>
+                    @endif
+                    @if ($setting->linkedin_url ?? null)
+                        <a href="{{ $setting->linkedin_url }}" target="_blank" class="text-gray-400 hover:text-blue-700 transition">
+                            <i class="fa-brands fa-linkedin text-xl"></i>
                         </a>
-                    </div>
+                    @endif
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h4 class="footer-wid-title">Về công ty</h4>
-                    <ul>
-                        <li><a href="{{ route('gioi-thieu') }}">Giới thiệu công ty</a></li>
-                        <li><a href="#">Gửi góp ý,khiếu nại</a></li>
-                    </ul>
-                </div>
+
+            {{-- Company Links --}}
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-4">Company</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{{ route('gioi-thieu') }}" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                    <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Send Feedback</a></li>
+                </ul>
             </div>
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h4 class="footer-wid-title">Tài Khoản </h4>
-                    <ul>
-                        <li><a href="{{ route('layouts') }}">Trang chủ</a></li>
-                        <li><a href="{{ route('client.profile.index') }}">Tài khoản của tôi</a></li>
-                        <li><a href="#">Lịch sử đơn hàng</a></li>
-                        <li><a href="#">Sản phẩm yêu thích</a></li>
-                        <li><a href="{{ route('bao-mat-thong-tin') }}">Bảo mật thông tin</a></li>
-                        <li><a href="{{ Auth::check() ? route('client.profile.index') : route('login') }}">Tài
-                                khoản của tôi</a></li>
-                        <li><a href="{{ Auth::check() ? route('client.profile.orders') : route('login') }}">Lịch
-                                sử đơn hàng</a></li>
-                        <li><a href="{{ Auth::check() ? route('client.profile.favorite') : route('login') }}">Sản
-                                phẩm yêu thích</a></li>
-                        <li><a href="{{ route('contact') }}">Liên hệ nhà cung cấp</a></li>
-                        <li><a href="{{ route('layouts') }}">Trang chủ</a></li>
-                    </ul>
-                </div>
+
+            {{-- Account Links --}}
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-4">Account</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{{ route('layouts') }}" class="text-gray-400 hover:text-white transition">Home</a></li>
+                    <li><a href="{{ route('client.profile.index') }}" class="text-gray-400 hover:text-white transition">My Account</a></li>
+                    <li><a href="{{ Auth::check() ? route('client.profile.orders') : route('login') }}" class="text-gray-400 hover:text-white transition">Order History</a></li>
+                    <li><a href="{{ Auth::check() ? route('client.profile.favorite') : route('login') }}" class="text-gray-400 hover:text-white transition">Wishlist</a></li>
+                </ul>
             </div>
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h4 class="footer-wid-title">Thông tin về chính sách</h4>
-                    <ul>
-                        <li>
-                            <a href="{{ route('thong-tin-ban-hang') }}">Thông tin bán hàng</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('dich-vu-ban-hang') }}">Dịch vụ bán hàng</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('chinh-sach-bao-hanh') }}">Chính sách bảo hành</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('chinh-sach-doi-tra') }}">Chính sách đổi trả</a>
-                        </li>
-                        <li><a href="{{ route('chinh-sach-van-chuyen') }}">Chính sách vận chuyển</a></li>
-                    </ul>
-                </div>
+
+            {{-- Policies --}}
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-4">Policies</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{{ route('thong-tin-ban-hang') }}" class="text-gray-400 hover:text-white transition">Sales Info</a></li>
+                    <li><a href="{{ route('dich-vu-ban-hang') }}" class="text-gray-400 hover:text-white transition">Sales Service</a></li>
+                    <li><a href="{{ route('chinh-sach-bao-hanh') }}" class="text-gray-400 hover:text-white transition">Warranty</a></li>
+                    <li><a href="{{ route('chinh-sach-doi-tra') }}" class="text-gray-400 hover:text-white transition">Returns</a></li>
+                    <li><a href="{{ route('chinh-sach-van-chuyen') }}" class="text-gray-400 hover:text-white transition">Shipping</a></li>
+                </ul>
             </div>
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-newsletter">
-                    <h2 class="footer-wid-title">Bản Tin</h2>
-                    <p>Đăng ký nhận bản tin của chúng tôi để nhận các ưu đãi độc quyền và cập nhật bộ sưu tập mới nhất
-                        gửi thẳng vào hộp thư của bạn!</p>
-                    <div class="newsletter-form">
-                        <form action="#">
-                            <input type="email" placeholder="Nhập email của bạn">
-                            <input type="submit" value="Đăng ký">
-                        </form>
-                    </div>
-                </div>
+
+            {{-- Newsletter --}}
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-4">Newsletter</h4>
+                <p class="text-sm mb-4">Subscribe to get exclusive offers and latest collection updates!</p>
+                <form class="flex flex-col gap-2">
+                    <input
+                        type="email"
+                        placeholder="Enter your email"
+                        class="px-3 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500 text-sm"
+                        required
+                    >
+                    <button type="submit" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium text-sm">
+                        Subscribe
+                    </button>
+                </form>
             </div>
         </div>
-        <div class="copyright">
-            <p>{{ $setting->copyright ?? '© ' . date('Y') }}</p>
+
+        {{-- Divider --}}
+        <div class="border-t border-gray-700 pt-8">
+            <p class="text-center text-gray-400 text-sm">
+                {{ $setting->copyright ?? '© ' . date('Y') . ' eShop. All rights reserved.' }}
+            </p>
         </div>
     </div>
-</div>
+</footer>

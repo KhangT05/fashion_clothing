@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Comment;
+use App\Models\BinhLuan;
 use App\Repositories\BaseRepository;
 
 class CommentRepository extends BaseRepository
 {
     public function __construct(
-        Comment $model
+        BinhLuan $model
     ) {
         $this->model = $model;
     }

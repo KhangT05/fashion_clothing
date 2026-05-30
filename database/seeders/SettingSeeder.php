@@ -8,28 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class SettingSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        DB::table('settings')->insert([
-            // Thông tin cơ bản
-            'name' => 'Công ty TNHH Thương mại TH23WebC',
-            'address' => '123 Nguyễn Văn Linh, Phường Tân Phú, Quận 7, TP. Hồ Chí Minh',
-            'phone' => '0838212360',
-            'description' => 'Chuyên cung cấp các sản phẩm chất lượng cao, dịch vụ tận tâm, giao hàng nhanh chóng trên toàn quốc.',
-            'logo' => 'images/logo.png',
-            'email' => 'cdth23webc@gmail.com',
-            // Social Media
-            'facebook_url' => 'https://www.facebook.com/TH23WebC',
-            'youtube_url' => 'https://www.youtube.com/@TH23WebC',
-            'instagram_url' => 'https://www.instagram.com/TH23WebC/',
-            'linkedin_url' => 'https://linkedin.com/company/TH23WebC',
-            'copyright' => '© 2026 CĐ TH 23WebC Company. All rights reserved.',
+   /**
+    * Run the database seeds.
+    */
+   public function run(): void
+   {
+      DB::table('settings')->insert([
+         // Thông tin cơ bản
+         'name' => 'Công ty TNHH Thương mại TH23WebC',
+         'address' => '123 Nguyễn Văn Linh, Phường Tân Phú, Quận 7, TP. Hồ Chí Minh',
+         'phone' => '0838212360',
+         'description' => 'Chuyên cung cấp các sản phẩm chất lượng cao, dịch vụ tận tâm, giao hàng nhanh chóng trên toàn quốc.',
+         'logo' => 'images/logo.png',
+         'email' => 'cdth23webc@gmail.com',
+         // Social Media
+         'facebook_url' => 'https://www.facebook.com/TH23WebC',
+         'youtube_url' => 'https://www.youtube.com/@TH23WebC',
+         'instagram_url' => 'https://www.instagram.com/TH23WebC/',
+         'linkedin_url' => 'https://linkedin.com/company/TH23WebC',
+         'copyright' => '© 2026 CĐ TH 23WebC Company. All rights reserved.',
 
-            // Thông tin bán hàng
-            'sales_info' => 'THÔNG TIN BÁN HÀNG
+         // Thông tin bán hàng
+         'sales_info' => 'THÔNG TIN BÁN HÀNG
 
 Công ty TNHH TH23WebC cam kết mang đến cho quý khách hàng những sản phẩm chính hãng, chất lượng cao với giá cả cạnh tranh nhất thị trường.
 
@@ -53,8 +53,8 @@ GIỜ LÀM VIỆC
 - Thứ 7 - Chủ nhật: 8:00 - 17:00
 - Lễ, Tết: Liên hệ hotline',
 
-            // Dịch vụ bán hàng
-            'sales_services' => 'DỊCH VỤ BÁN HÀNG
+         // Dịch vụ bán hàng
+         'sales_services' => 'DỊCH VỤ BÁN HÀNG
 
 Chúng tôi cung cấp đa dạng các dịch vụ nhằm mang lại trải nghiệm mua sắm tuyệt vời nhất cho quý khách hàng.
 
@@ -89,8 +89,8 @@ CÁC DỊCH VỤ NỔI BẬT
 Liên hệ: 0838212360
  để được phục vụ tt nhất!',
 
-            // Chính sách vận chuyển
-            'shipping_policy' => 'CHÍNH SÁCH VẬN CHUYỂN
+         // Chính sách vận chuyển
+         'shipping_policy' => 'CHÍNH SÁCH VẬN CHUYỂN
 
 TH23WebC cam kết giao hàng nhanh chóng, an toàn và đúng hẹn.
 
@@ -130,8 +130,8 @@ LƯU Ý
 - Quý khách có quyền từ chối nhận hàng nếu sản phẩm không đúng mô tả
 - Liên hệ hotline ngay nếu có vấn đề phát sinh',
 
-            // Giới thiệu
-            'about_us' => 'Công ty TNHH TH23WebC là nền tảng bán lẻ đa ngành nghề số 1 Việt Nam. 
+         // Giới thiệu
+         'about_us' => 'Công ty TNHH TH23WebC là nền tảng bán lẻ đa ngành nghề số 1 Việt Nam. 
 
 Với chiến lược omni-channel, Công ty vận hành mạng lưới hàng ngàn cửa hàng trên toàn quốc song song với việc tận dụng 
 hiểu biết sâu rộng về khách hàng thông qua nền tảng dữ liệu lớn, 
@@ -143,8 +143,8 @@ Hotline: 0838212360
 
 Email: info@TH23WebC.com',
 
-            // Chính sách đổi trả
-            'return_policy' => 'CHÍNH SÁCH ĐỔI TRẢ
+         // Chính sách đổi trả
+         'return_policy' => 'CHÍNH SÁCH ĐỔI TRẢ
 
 TH23WebC cam kết quyền lợi tốt nhất cho khách hàng với chính sách đổi trả linh hoạt và minh bạch.
 
@@ -187,8 +187,8 @@ TRƯỜNG HỢP KHÔNG ĐỔI TRẢ
 
 Mọi thắc mắc vui lòng liên hệ: 0838212360',
 
-            // Chính sách bảo hành
-            'warranty_policy' => 'CHÍNH SÁCH BẢO HÀNH
+         // Chính sách bảo hành
+         'warranty_policy' => 'CHÍNH SÁCH BẢO HÀNH
 
 TH23WebC cam kết bảo hành chính hãng cho tất cả sản phẩm được mua tại hệ thống.
 
@@ -234,8 +234,8 @@ Hotline: 0838212360
 
 Giờ làm việc: 8:00 - 18:00 (Thứ 2 - Thứ 7)',
 
-            // Chính sách bảo mật thông tin
-            'privacy_policy' => 'CHÍNH SÁCH BẢO MẬT THÔNG TIN
+         // Chính sách bảo mật thông tin
+         'privacy_policy' => 'CHÍNH SÁCH BẢO MẬT THÔNG TIN
 
 TH23WebC cam kết bảo vệ thông tin cá nhân của khách hàng một cách tối đa.
 
@@ -312,9 +312,9 @@ Hotline: 0838212360
 
 Cập nhật lần cuối: 15/01/2026',
 
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        $this->command->info('✅ Đã tạo thông tin cài đặt website thành công!');
-    }
+         'created_at' => now(),
+         'updated_at' => now(),
+      ]);
+      $this->command->info('✅ Đã tạo thông tin cài đặt website thành công!');
+   }
 }

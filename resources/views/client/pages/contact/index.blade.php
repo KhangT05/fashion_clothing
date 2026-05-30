@@ -1,6 +1,7 @@
 @extends('client.layouts')
 @section('title', 'Trang liên hệ')
 @section('content')
+    <!-- Page Content -->
     @foreach ($settings as $setting)
     @endforeach
     <div class="container mx-auto px-4 py-12">
@@ -55,7 +56,7 @@
                             </div>
                             <div>
                                 <h4 class="font-semibold mb-1 text-gray-800">Địa chỉ</h4>
-                                <p class="text-gray-600">{{ $settings->address }}</p>
+                                <p class="text-gray-600">{{ $setting->address }}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -64,7 +65,7 @@
                             </div>
                             <div>
                                 <h4 class="font-semibold mb-1 text-gray-800">Điện thoại</h4>
-                                <p class="text-gray-600">{{ $settings->phone }}</p>
+                                <p class="text-gray-600">{{ $setting->phone }}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -73,7 +74,7 @@
                             </div>
                             <div>
                                 <h4 class="font-semibold mb-1 text-gray-800">Email</h4>
-                                <p class="text-gray-600">{{ $settings->email }}</p>
+                                <p class="text-gray-600">{{ $setting->email }}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -91,19 +92,19 @@
                 <div class="bg-white rounded-lg shadow p-8">
                     <h3 class="text-2xl font-bold mb-4 text-gray-800">Kết Nối Với Chúng Tôi</h3>
                     <div class="flex gap-4">
-                        <a href="{{ $settings->facebook_url }}"
+                        <a href="{{ $setting->facebook_url }}"
                             class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition">
                             <i class="fa fa-facebook"></i>
                         </a>
-                        <a href="{{ $settings->linkedin_url }}"
+                        <a href="{{ $setting->linkedin_url }}"
                             class="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center text-white hover:bg-blue-500 transition">
                             <i class="fa fa-linkedin"></i>
                         </a>
-                        <a href="{{ $settings->instagram_url }}"
+                        <a href="{{ $setting->instagram_url }}"
                             class="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center text-white hover:bg-pink-700 transition">
                             <i class="fa fa-instagram"></i>
                         </a>
-                        <a href="{{ $settings->youtube_url }}"
+                        <a href="{{ $setting->youtube_url }}"
                             class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition">
                             <i class="fa fa-youtube"></i>
                         </a>

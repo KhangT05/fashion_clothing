@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Order;
+use App\Models\Hoadon;
 
 class OrderRepository extends BaseRepository
 {
-    public function __construct(Order $model)
+    public function __construct(Hoadon $model)
     {
         $this->model = $model;
     }

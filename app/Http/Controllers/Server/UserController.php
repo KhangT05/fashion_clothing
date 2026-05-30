@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = $this->userService->pagination($request);
+        $users = $this->userService->paginate($request);
         return view('server.pages.users.index', compact('users'));
     }
 
@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        if ($this->userService->save($request)) {
+        if ($this->userService->create($request)) {
             return redirect()->route('users.index')->with('success', 'Thêm mới thành viên thành công');
         }
         return redirect()->route('users.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại');

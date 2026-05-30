@@ -1,194 +1,248 @@
-      <nav class="bg-white/80 top-0 z-50 shadow-md relative">
-          <div class="container mx-auto px-4">
-              <div class="flex justify-between items-center py-3">
-                  <a href="{{ route('layouts') }}" class=" text-2xl font-bold">
-                      e<span class="font-extrabold">Thời trang</span>
-                  </a>
-                  <form method="GET" action="{{ route('client.products.index') }}" class="position-relative">
-                      <div class="input-group">
-                          <input type="text" id="search-input" autocomplete="off" class="form-control"
-                              value="{{ request('keyword') }}" placeholder="Nhập từ khóa tìm kiếm..." name="keyword" />
-                          <button class="btn btn-primary" type="submit">
-                              <i class="fa fa-search"></i>
-                          </button>
-                      </div>
-                      <div id="search-results" class="list-group position-absolute w-100 shadow-lg d-none"
-                          style="z-index: 1000; max-height: 400px; overflow-y: auto; top: 100%;">
-                      </div>
-                  </form>
-                  <ul class="flex gap-2 items-center">
-                      <li>
-                          <a href="{{ route('layouts') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">
-                              Trang chủ
-                          </a>
-                      </li>
-                      <li>
-                          <a href="{{ route('gioi-thieu') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">
-                              Giới thiệu
-                          </a>
-                      </li>
-                      <li>
-                          <a href="{{ route('client.products.index') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">
-                              Sản Phẩm
-                          </a>
-                      </li>
-                      <li><a href="{{ route('client.profile.index') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">Tài
-                              khoản</a></li>
-                      <li><a href="{{ route('blog') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">Tin tức</a>
-                      </li>
-                      <li>
-                          <a href="{{ route('contact') }}"
-                              class="font-medium uppercase hover:text-[#667eea] transition">
-                              Liên hệ
-                          </a>
-                      </li>
-                      <li>
-                          @if (Auth::check())
-                              <div class="relative">
-                                  <button id="accountBtn"
-                                      class="font-medium uppercase hover:text-[#667eea] 
-                                        transition flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100">
-                                      <i class="fa fa-user"></i>
-                                      <span>Tài khoản</span>
-                                  </button>
-                                  <div id="accountDropdown" style="display: none;"
-                                      class="absolute right-0 mt-2 w-56 
-                                        bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden">
-                                      <div class="px-4 py-3 ">
-                                          <p class="text-xs opacity-90 mb-1">Chào mừng</p>
-                                          <p class="font-semibold truncate">{{ Auth::user()->name }}</p>
-                                      </div>
-                                      <a href="{{ route('client.profile.index') }}"
-                                          class="block px-4 py-2 text-sm hover:bg-gray-100 transition">
-                                          <i class="fa fa-user mr-2"></i>Thông tin
-                                      </a>
-                                      <a href="{{ route('auth.logout') }}"
-                                          class="block px-4 py-2 text-sm hover:bg-gray-100 transition">
-                                          <i class="fa-solid fa-right-from-bracket mr-2"></i>Đăng xuất
-                                      </a>
-                                  </div>
-                              </div>
-                          @else
-                              <button type="button"
-                                  class="font-medium uppercase hover:text-[#667eea] transition flex items-center gap-1"
-                                  data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                  <i class="fa fa-user"></i>
-                                  <span>Tài khoản</span>
-                              </button>
-                          @endif
-                      </li>
-                      <li class="cart-wrapper">
-                          @include('client.components.badge-carts')
-                      </li>
-                  </ul>
-              </div>
-          </div>
-      </nav>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-sm">
-              <div class="modal-content account-modal">
-                  <div class="modal-body text-center">
-                      <button type="button" class="btn btn-login w-100 mb-3" id="btn-login">
-                          Đăng nhập
-                      </button>
-                      <button type="button" class="btn btn-register w-100" id="btn-register">
-                          Đăng ký
-                      </button>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                  <div class="modal-header border-0">
-                      <h5 class="modal-title w-100 text-center">Đăng nhập</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body px-4">
-                      <form class="m-t" method="POST" action="{{ route('login') }}" id="loginForm">
-                          @csrf
-                          <div class="form-group">
-                              <label class="text-center">Email</label>
-                              <input type="email" name="email"
-                                  class="form-control @error('email') is-invalid @enderror"
-                                  placeholder="Nhập email của bạn" required="" value="{{ old('email') }}">
-                          </div>
-                          @error('email')
-                              <div class="alert alert-danger">*{{ $message }}</div>
-                          @enderror
-                          <div class="form-group">
-                              <label>Mật khẩu</label>
-                              <input type="password" name="password"
-                                  class="form-control @error('password') is-invalid @enderror"
-                                  placeholder="Nhập mật khẩu" required="">
-                          </div>
-                          @error('password')
-                              <div class="alert alert-danger">*{{ $message }}</div>
-                          @enderror
-                          <button type="submit" class="btn btn-primary block full-width m-b">Đăng
-                              nhập</button>
-                          <p class="text-muted text-center">
-                              <small>Bạn chưa có tài khoản thành viên?</small>
-                          </p>
-                          <a href="#" id="switchToRegister" class="btn btn-sm btn-white btn-block">
-                              Tạo tài khoản mới
-                          </a>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                  <div class="modal-header border-0">
-                      <h5 class="modal-title w-100 text-center">Đăng ký thành viên</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body px-4">
-                      <form class="m-t" role="form" action="{{ route('auth.register') }}" method="POST">
-                          @csrf
-                          <div class="form-group">
-                              <label>Họ và tên</label>
-                              <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                  value="{{ old('name') }}" placeholder="Nhập họ tên của bạn" name="name"
-                                  required="">
-                          </div>
-                          @error('name')
-                              <div class="alert alert-danger">*{{ $message }}</div>
-                          @enderror
-                          <div class="form-group">
-                              <label>Email</label>
-                              <input type="email" name="email"
-                                  class="form-control @error('email') is-invalid @enderror" placeholder="Nhập email"
-                                  required="" value="{{ old('email') }}">
-                          </div>
-                          @error('email')
-                              <div class="alert alert-danger">*{{ $message }}</div>
-                          @enderror
-                          <div class="form-group">
-                              <label>Mật khẩu</label>
-                              <input type="password" name="password"
-                                  class="form-control @error('password') is-invalid @enderror"
-                                  placeholder="Nhập mật khẩu" required="">
-                          </div>
-                          @error('password')
-                              <div class="alert alert-danger">*{{ $message }}</div>
-                          @enderror
-                          <button type="submit" class="btn btn-primary block full-width m-b">Đăng
-                              ký</button>
-                          <p class="text-muted text-center"><small>Bạn đã có tài
-                                  khoản?</small></p>
-                          <a href="#" id="switchToLogin" class="btn btn-sm btn-white btn-block">Đăng nhập
-                              ngay</a>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            {{-- Logo --}}
+            <a href="{{ route('layouts') }}" class="flex-shrink-0">
+                <span class="text-2xl font-bold">e<span class="font-extrabold text-blue-600">Shop</span></span>
+            </a>
+
+            {{-- Search Bar --}}
+            <form method="GET" action="{{ route('client.products.index') }}" class="flex-1 mx-8">
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="search-input"
+                        autocomplete="off"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value="{{ request('keyword') }}"
+                        placeholder="Search products..."
+                        name="keyword"
+                    />
+                    <button type="submit" class="absolute right-0 top-0 mt-2 mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div id="search-results" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"></div>
+                </div>
+            </form>
+
+            {{-- Navigation Links & User Menu --}}
+            <div class="flex items-center gap-6">
+                {{-- Desktop Menu --}}
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="{{ route('layouts') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Home</a>
+                    <a href="{{ route('gioi-thieu') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">About</a>
+                    <a href="{{ route('client.products.index') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Shop</a>
+                    <a href="{{ route('blog') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Blog</a>
+                    <a href="{{ route('contact') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Contact</a>
+                </div>
+
+                {{-- User Account --}}
+                <div class="flex items-center gap-4">
+                    @if (Auth::check())
+                        <div class="relative">
+                            <button id="accountBtn" class="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
+                                <i class="fa fa-user text-lg"></i>
+                            </button>
+                            <div id="accountDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-40">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-xs text-gray-500">Welcome</p>
+                                    <p class="font-semibold text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                                </div>
+                                <a href="{{ route('client.profile.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                    <i class="fa fa-user mr-2"></i>Profile
+                                </a>
+                                <a href="{{ route('auth.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition border-t border-gray-100">
+                                    <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <button type="button" onclick="openLoginModal()" class="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
+                            <i class="fa fa-user text-lg"></i>
+                        </button>
+                    @endif
+
+                    {{-- Cart Icon --}}
+                    <div class="cart-wrapper">
+                        @include('client.components.badge-carts')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{{-- Login Modal --}}
+<div id="loginModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900">Sign In</h2>
+            <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror"
+                        placeholder="Enter your email"
+                        value="{{ old('email') }}"
+                        required
+                    >
+                    @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
+                        placeholder="Enter your password"
+                        required
+                    >
+                    @error('password')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition mb-4">
+                    Sign In
+                </button>
+
+                <p class="text-center text-sm text-gray-600 mb-4">
+                    Don't have an account?
+                    <button type="button" onclick="switchToRegister()" class="text-blue-600 hover:text-blue-700 font-semibold">
+                        Sign Up
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Register Modal --}}
+<div id="registerModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900">Create Account</h2>
+            <button onclick="closeRegisterModal()" class="text-gray-500 hover:text-gray-700">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form method="POST" action="{{ route('auth.register') }}">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror"
+                        placeholder="Enter your full name"
+                        value="{{ old('name') }}"
+                        required
+                    >
+                    @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror"
+                        placeholder="Enter your email"
+                        value="{{ old('email') }}"
+                        required
+                    >
+                    @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
+                        placeholder="Enter your password"
+                        required
+                    >
+                    @error('password')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition mb-4">
+                    Create Account
+                </button>
+
+                <p class="text-center text-sm text-gray-600">
+                    Already have an account?
+                    <button type="button" onclick="switchToLogin()" class="text-blue-600 hover:text-blue-700 font-semibold">
+                        Sign In
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const accountBtn = document.getElementById('accountBtn');
+    const accountDropdown = document.getElementById('accountDropdown');
+
+    function openLoginModal() {
+        loginModal.classList.remove('hidden');
+        registerModal.classList.add('hidden');
+    }
+
+    function closeLoginModal() {
+        loginModal.classList.add('hidden');
+    }
+
+    function closeRegisterModal() {
+        registerModal.classList.add('hidden');
+    }
+
+    function switchToLogin() {
+        loginModal.classList.remove('hidden');
+        registerModal.classList.add('hidden');
+    }
+
+    function switchToRegister() {
+        registerModal.classList.remove('hidden');
+        loginModal.classList.add('hidden');
+    }
+
+    accountBtn?.addEventListener('click', function() {
+        accountDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!accountBtn?.contains(e.target) && !accountDropdown?.contains(e.target)) {
+            accountDropdown?.classList.add('hidden');
+        }
+    });
+
+    loginModal?.addEventListener('click', function(e) {
+        if (e.target === loginModal) closeLoginModal();
+    });
+
+    registerModal?.addEventListener('click', function(e) {
+        if (e.target === registerModal) closeRegisterModal();
+    });
+</script>

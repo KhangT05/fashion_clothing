@@ -19,8 +19,7 @@ abstract class BaseService
     protected $with = [];
     protected $filterSearch = ['name'];
     protected $simpleFilter = ['publish'];
-    protected $complexFilter = ['price'];
-    abstract protected function perpageModelData(Request $request): self;
+    protected $complexFilter = ['giaban'];
     public function __construct(
         Baserepository $repository
     ) {
@@ -66,12 +65,23 @@ abstract class BaseService
     }
     // mục đích khi tạo ra hàm này là để bắt buộc các class con phải khai báo dữ liệu
     // , chuẩn bị cho việc thêm hoặc cập nhật dữ liệu
+    abstract protected function prepageModeldata(Request $request): self;
     public function save(Request $request, ?int $id = null)
     {
         try {
+            // $this->beginTransaction();
+            // // xử lý raw data
+            // $processedData = $this->beforeCreate($request);
+            // // lọc filter
+            // $fillable = $this->repository->getFillable();
+            // $payload = collect($processedData)->only($fillable)->toArray();
+            // $model = $this->repository->create($payload);
+            // $this->afterCreate($model, $request);
+            // $this->commit();
+            // return $model;
             return $this
                 ->beginTransaction()
-                ->perpageModelData($request)
+                ->prepageModeldata($request)
                 ->beforeSave()
                 ->saveModel($id)
                 ->afterSave()
@@ -93,6 +103,11 @@ abstract class BaseService
     public function show(string $field, $value)
     {
         return $this->repository->findByField($field, $value);
+    }
+    // lấy trạng thái
+    public function getTrangThai()
+    {
+        return $this->repository->getTrangThai();
     }
     // xóa vĩnh viễn
     public function trash($id)

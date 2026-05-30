@@ -18,13 +18,26 @@ class Category extends Model
         'slug',
         'publish'
     ];
-    public function product(): BelongsToMany
+    public function products()
     {
-        return $this->belongsToMany(Product::class, 'categories_product', 'category_id', 'product_id')->withTimestamps();
+        // Giả sử model sản phẩm là Product hoặc Sanpham
+        return $this->hasMany(Sanpham::class, 'category_id', 'id');
+    }
+    public function scopeActive($query)
+    {
+        return $query->where('publish', 1);
+    }
+    public function scopeHome($query)
+    {
+        return $query->where('is_home', 1);
+    }
+    public function sanpham(): BelongsToMany
+    {
+        return $this->belongsToMany(Sanpham::class, 'categories_sanpham', 'category_id', 'sanpham_id')->withTimestamps();
     }
     public function getRouteKeyName(): string
     {
         return 'slug';
     }
-    public $relationable = ['product'];
+    public $relationable = ['sanpham'];
 }

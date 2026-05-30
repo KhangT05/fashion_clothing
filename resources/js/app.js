@@ -1,7 +1,8 @@
 import './bootstrap';
-
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-
-Alpine.start();
+//thêm file js cho cart
+//import './cart';
+//thêm file js cho checkout
+//import './checkout';
+//comment dòng này
+// import Swal from 'sweetalert2';
+// window.Swal = Swal;
