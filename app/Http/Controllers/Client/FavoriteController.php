@@ -22,7 +22,10 @@ class FavoriteController extends Controller
         /** @var \App\Models\User $user */  // <--- Thêm dòng này
         $user = Auth::user();
         // Lấy danh sách sản phẩm user đã thích (có phân trang)
-        $favorite = $user->yeuthich()->paginate(10);
+        // Eager load relationships để tránh N+1 queries
+        $favorite = $user->yeuthich()
+            ->with(['thuonghieu', 'categories', 'sanpham_variants'])
+            ->paginate(10);
 
         return view('client.pages.profile.favorite.index', compact('favorite'));
     }

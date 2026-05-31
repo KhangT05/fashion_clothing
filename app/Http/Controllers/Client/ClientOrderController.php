@@ -12,7 +12,10 @@ class ClientOrderController extends Controller
     // Req 31: Danh sách đơn hàng (Lọc trạng thái)
     public function index(Request $request)
     {
-        $query = Hoadon::where('user_id', Auth::id())->orderBy('created_at', 'desc');
+        $query = Hoadon::where('user_id', Auth::id())
+            ->with(['chiTiet.sanpham', 'chiTiet.bienthe']) // Eager load relationships
+            ->orderBy('created_at', 'desc');
+
         // Lọc theo trạng thái nếu có (?status=1)
         if ($request->has('status') && $request->status != 'all') {
             $query->where('trangthai', $request->status);

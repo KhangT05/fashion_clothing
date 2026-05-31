@@ -114,12 +114,14 @@ class ProductService extends BaseService
         // DELETE các variants không còn tồn tại
         $variantsToDelete = array_diff($existingVariantIds, $submittedVariantIds);
         if (!empty($variantsToDelete)) {
-            foreach ($variantsToDelete as $deleteId) {
-                $variantToDelete = $this->model->sanpham_variants()->find($deleteId);
-                if ($variantToDelete) {
-                    $variantToDelete->attributesValues()->detach();
-                    $variantToDelete->delete();
-                }
+            $variants = $this->model->sanpham_variants()
+                ->whereIn('id', $variantsToDelete)
+                ->with('attributesValues') // nếu cần detach
+                ->get();
+
+            foreach ($variants as $v) {
+                $v->attributesValues()->detach();
+                $v->delete();
             }
         }
         $this->updateTotalQuantity();
