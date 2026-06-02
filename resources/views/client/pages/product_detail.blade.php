@@ -12,8 +12,8 @@
         </nav>
 
         {{-- Main Product Section --}}
-        <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 md:p-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {{-- Image Gallery --}}
                 <div class="space-y-4">
                     <div class="bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
@@ -60,19 +60,21 @@
                     </div>
 
                     {{-- Pricing --}}
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                        <p class="text-gray-600 text-sm mb-2">Current Price</p>
-                        <div class="flex items-end gap-3">
-                            <span class="text-3xl md:text-4xl font-bold text-red-600" id="display-price">
+                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 p-6 rounded-2xl border-2 border-indigo-200 dark:border-indigo-700/50">
+                        <p class="text-slate-600 dark:text-slate-400 text-sm font-semibold mb-3 uppercase tracking-wide">Price</p>
+                        <div class="flex items-end gap-4">
+                            <span class="text-4xl md:text-5xl font-black text-red-600 dark:text-red-400" id="display-price">
                                 {{ number_format($defaultVariant->giaban ?? $product->giaban, 0, ',', '.') }}đ
                             </span>
                             @if ($product->discount > 0)
-                                <span class="text-lg text-gray-400 line-through mb-2">
-                                    {{ number_format($defaultVariant->giaban ?? $product->giaban, 0, ',', '.') }}đ
-                                </span>
-                                <span class="bg-red-500 text-white px-3 py-1 rounded text-sm font-semibold mb-2">
-                                    -{{ $product->discount }}%
-                                </span>
+                                <div class="flex flex-col gap-2 ml-auto">
+                                    <span class="text-xl text-slate-400 dark:text-slate-500 line-through">
+                                        {{ number_format($defaultVariant->giaban ?? $product->giaban, 0, ',', '.') }}đ
+                                    </span>
+                                    <span class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-1 rounded-lg text-sm font-bold shadow-lg">
+                                        SAVE {{ $product->discount }}%
+                                    </span>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -134,36 +136,36 @@
 
                         <button
                             type="submit"
-                            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 transform hover:shadow-lg"
+                            class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 dark:from-indigo-500 dark:to-indigo-600 dark:hover:from-indigo-600 dark:hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 transform hover:shadow-2xl hover:scale-105 shadow-xl"
                         >
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>Add to Cart</span>
+                            <i class="fa fa-shopping-cart text-xl"></i>
+                            <span class="text-lg">Add to Cart</span>
                         </button>
                     </form>
 
                     {{-- Wishlist --}}
                     <button
                         onclick="toggleWishlist({{ $product->id }})"
-                        class="w-full border-2 border-gray-300 hover:border-red-500 text-gray-900 hover:text-red-500 font-semibold py-2 px-4 rounded-lg transition-all"
+                        class="w-full border-2 border-slate-300 dark:border-slate-600 hover:border-red-500 dark:hover:border-red-500 text-slate-900 dark:text-slate-100 hover:text-red-500 dark:hover:text-red-400 font-bold py-3 px-4 rounded-xl transition-all duration-300 hover:bg-red-50 dark:hover:bg-red-900/10 shadow-sm"
                         id="wishlist-btn"
                     >
                         <i class="fa fa-heart{{ $isWishlisted ? '' : '-o' }}"></i>
-                        <span id="wishlist-text">{{ $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}</span>
+                        <span id="wishlist-text" class="ml-2">{{ $isWishlisted ? '❤️ Remove from Wishlist' : '🤍 Add to Wishlist' }}</span>
                     </button>
 
                     {{-- Additional Info --}}
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm space-y-2">
-                        <p class="font-semibold text-gray-900 flex items-center gap-2">
-                            <i class="fa fa-check-circle text-green-600"></i>
-                            Free & Fast Shipping
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-700/50 rounded-2xl p-5 text-sm space-y-3">
+                        <p class="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+                            <span class="text-xl">✓</span>
+                            <span>Free & Fast Shipping</span>
                         </p>
-                        <p class="font-semibold text-gray-900 flex items-center gap-2">
-                            <i class="fa fa-shield text-green-600"></i>
-                            100% Authentic Guarantee
+                        <p class="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+                            <span class="text-xl">✓</span>
+                            <span>100% Authentic Guarantee</span>
                         </p>
-                        <p class="font-semibold text-gray-900 flex items-center gap-2">
-                            <i class="fa fa-undo text-green-600"></i>
-                            Easy Returns
+                        <p class="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+                            <span class="text-xl">✓</span>
+                            <span>Easy 30-Day Returns</span>
                         </p>
                     </div>
                 </div>
@@ -171,47 +173,53 @@
         </div>
 
         {{-- Description Section --}}
-        <div class="mt-8 bg-white rounded-lg shadow-sm p-6 md:p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Product Description</h2>
-            <div class="prose prose-sm max-w-none text-gray-600">
-                {!! $product->mota ?? '<p class="text-gray-400 italic">Description coming soon...</p>' !!}
+        <div class="mt-12 bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 md:p-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-3">
+                <span class="w-1 h-8 bg-indigo-600 rounded"></span>
+                Product Description
+            </h2>
+            <div class="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed">
+                {!! $product->mota ?? '<p class="text-slate-400 italic">Description coming soon...</p>' !!}
             </div>
         </div>
 
         {{-- Variants Details Table --}}
         @if (count($product->sanpham_variants) > 0)
-            <div class="mt-8 bg-white rounded-lg shadow-sm p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Available Variants</h2>
+            <div class="mt-12 bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 md:p-12 overflow-hidden">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-8 flex items-center gap-3">
+                    <span class="w-1 h-8 bg-indigo-600 rounded"></span>
+                    Available Variants
+                </h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-100 border-b-2 border-gray-300">
+                        <thead class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700 dark:to-slate-600 border-b-2 border-slate-300 dark:border-slate-600">
                             <tr>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-900">SKU</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-900">Price</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-900">Stock</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-900">Status</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-900 dark:text-slate-100">SKU</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-900 dark:text-slate-100">Price</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-900 dark:text-slate-100">Stock</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-900 dark:text-slate-100">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                             @foreach ($product->sanpham_variants as $variant)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 font-mono text-gray-900">{{ $variant->sku }}</td>
-                                    <td class="px-4 py-3 font-bold text-red-600">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-slate-900 dark:text-slate-100 font-semibold">{{ $variant->sku }}</td>
+                                    <td class="px-6 py-4 font-bold text-red-600 dark:text-red-400 text-lg">
                                         {{ number_format($variant->giaban ?? $product->giaban, 0, ',', '.') }}đ
                                     </td>
-                                    <td class="px-4 py-3">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $variant->soluong > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    <td class="px-6 py-4">
+                                        <span class="inline-block px-3 py-1.5 rounded-full text-xs font-bold {{ $variant->soluong > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300' }}">
                                             {{ $variant->soluong }} units
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-6 py-4">
                                         @if ($variant->soluong > 0)
-                                            <span class="inline-flex items-center gap-1 text-green-600">
-                                                <i class="fa fa-check-circle"></i> In Stock
+                                            <span class="inline-flex items-center gap-2 text-green-600 dark:text-green-400 font-semibold">
+                                                <i class="fa fa-check-circle text-lg"></i> In Stock
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 text-red-600">
-                                                <i class="fa fa-times-circle"></i> Out of Stock
+                                            <span class="inline-flex items-center gap-2 text-red-600 dark:text-red-400 font-semibold">
+                                                <i class="fa fa-times-circle text-lg"></i> Out of Stock
                                             </span>
                                         @endif
                                     </td>
@@ -225,9 +233,12 @@
 
         {{-- Related Products --}}
         @if (count($relatedProducts) > 0)
-            <div class="mt-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="mt-12">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-8 flex items-center gap-3">
+                    <span class="w-1 h-8 bg-indigo-600 rounded"></span>
+                    Related Products
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($relatedProducts as $related)
                         @include('client.components.product-card', ['product' => $related])
                     @endforeach

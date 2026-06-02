@@ -17,11 +17,11 @@
     <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 flex flex-col h-full group">
 
         {{-- IMAGE SECTION --}}
-        <div class="relative overflow-hidden bg-slate-100 dark:bg-slate-800 h-48 md:h-56">
+        <div class="relative overflow-hidden bg-slate-100 dark:bg-slate-800 h-48 md:h-60 lg:h-64">
             <a href="{{ $productUrl }}" class="block w-full h-full">
                 <img
                     src="{{ $hinhAnh }}"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     alt="{{ $tenSP }}"
                     loading="lazy"
                 >
@@ -29,7 +29,7 @@
 
             {{-- DISCOUNT BADGE --}}
             @if ($discount > 0)
-                <div class="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-md font-semibold text-sm shadow-md">
+                <div class="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full font-bold text-sm shadow-lg">
                     -{{ (int) $discount }}%
                 </div>
             @endif
@@ -89,16 +89,21 @@
         </div>
 
         {{-- PRODUCT INFO SECTION --}}
-        <div class="p-3 md:p-4 flex flex-col flex-1">
-            <a href="{{ $productUrl }}" class="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors line-clamp-2 mb-2">
+        <div class="p-4 md:p-5 flex flex-col flex-1 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
+            <a href="{{ $productUrl }}" class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors line-clamp-2 mb-3 h-14">
                 {{ $tenSP }}
             </a>
 
-            <div class="flex items-center gap-2 flex-wrap mt-auto pt-2">
+            <div class="flex items-center gap-2 flex-wrap mt-auto pt-3 border-t border-slate-200 dark:border-slate-700">
                 @if ($discount > 0)
-                    <span class="text-xs md:text-sm text-slate-400 dark:text-slate-500 line-through">{{ number_format($giaGoc, 0, ',', '.') }}đ</span>
+                    <span class="text-xs md:text-sm text-slate-500 dark:text-slate-400 line-through">{{ number_format($giaGoc, 0, ',', '.') }}đ</span>
                 @endif
-                <span class="text-base md:text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ number_format($giaSauGiam, 0, ',', '.') }}đ</span>
+                <span class="text-lg md:text-xl font-bold text-red-600 dark:text-red-400">{{ number_format($giaSauGiam, 0, ',', '.') }}đ</span>
+                @if ($discount > 0)
+                    <span class="ml-auto text-xs font-semibold px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full">
+                        Save {{ (int) $discount }}%
+                    </span>
+                @endif
             </div>
         </div>
     </div>

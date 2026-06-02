@@ -1,0 +1,161 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e7]
+        - generic [ref=e10]: Internal Server Error
+      - button "Copy as Markdown" [ref=e11] [cursor=pointer]:
+        - img [ref=e12]
+        - generic [ref=e15]: Copy as Markdown
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - heading "Illuminate\\Database\\QueryException" [level=1] [ref=e20]
+        - generic [ref=e22]: vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+        - paragraph [ref=e23]: "SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (Connection: mysql, Host: localhost, Port: 3306, Database: tkhangclick_fas_shop, SQL: select * from `sessions` where `id` = oVuoVXCtfy9z82g84usKVwrzZjOfPIItVfWFj7DQ limit 1)"
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - generic [ref=e27]: LARAVEL
+            - generic [ref=e28]: 12.48.1
+          - generic [ref=e29]:
+            - generic [ref=e30]: PHP
+            - generic [ref=e31]: 8.4.21
+        - generic [ref=e32]:
+          - img [ref=e33]
+          - text: UNHANDLED
+        - generic [ref=e36]: CODE 2002
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - img [ref=e40]
+          - text: "500"
+        - generic [ref=e43]:
+          - img [ref=e44]
+          - text: GET
+        - generic [ref=e48]: http://localhost:8000
+        - button [ref=e49] [cursor=pointer]:
+          - img [ref=e50]
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - img [ref=e58]
+          - heading "Exception trace" [level=3] [ref=e61]
+        - generic [ref=e62]:
+          - generic [ref=e64] [cursor=pointer]:
+            - img [ref=e65]
+            - generic [ref=e69]: 54 vendor frames
+            - button [ref=e70]:
+              - img [ref=e71]
+          - generic [ref=e75]:
+            - generic [ref=e76] [cursor=pointer]:
+              - generic [ref=e79]:
+                - code [ref=e83]:
+                  - generic [ref=e84]: public\index.php
+                - generic [ref=e86]: public\index.php:20
+              - button [ref=e88]:
+                - img [ref=e89]
+            - code [ref=e97]:
+              - generic [ref=e98]: "15"
+              - generic [ref=e99]: 16// Bootstrap Laravel and handle the request...
+              - generic [ref=e100]: 17/** @var Application $app */
+              - generic [ref=e101]: 18$app = require_once __DIR__.'/../bootstrap/app.php';
+              - generic [ref=e102]: "19"
+              - generic [ref=e103]: 20$app->handleRequest(Request::capture());
+              - generic [ref=e104]: "21"
+          - generic [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - generic [ref=e111]: 1 vendor frame
+            - button [ref=e112]:
+              - img [ref=e113]
+      - generic [ref=e117]:
+        - generic [ref=e119]:
+          - img [ref=e121]
+          - heading "Queries" [level=3] [ref=e123]
+        - generic [ref=e125]: // No queries executed
+    - generic [ref=e127]:
+      - generic [ref=e128]:
+        - heading "Headers" [level=2] [ref=e129]
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: host
+            - generic [ref=e134]: localhost:8000
+          - generic [ref=e135]:
+            - generic [ref=e136]: user-agent
+            - generic [ref=e138]: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0
+          - generic [ref=e139]:
+            - generic [ref=e140]: accept
+            - generic [ref=e142]: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+          - generic [ref=e143]:
+            - generic [ref=e144]: accept-language
+            - generic [ref=e146]: undefined
+          - generic [ref=e147]:
+            - generic [ref=e148]: accept-encoding
+            - generic [ref=e150]: gzip, deflate, br, zstd
+          - generic [ref=e151]:
+            - generic [ref=e152]: connection
+            - generic [ref=e154]: keep-alive
+          - generic [ref=e155]:
+            - generic [ref=e156]: upgrade-insecure-requests
+            - generic [ref=e158]: "1"
+          - generic [ref=e159]:
+            - generic [ref=e160]: sec-fetch-dest
+            - generic [ref=e162]: document
+          - generic [ref=e163]:
+            - generic [ref=e164]: sec-fetch-mode
+            - generic [ref=e166]: navigate
+          - generic [ref=e167]:
+            - generic [ref=e168]: sec-fetch-site
+            - generic [ref=e170]: none
+          - generic [ref=e171]:
+            - generic [ref=e172]: sec-fetch-user
+            - generic [ref=e174]: "?1"
+          - generic [ref=e175]:
+            - generic [ref=e176]: priority
+            - generic [ref=e178]: u=0, i
+      - generic [ref=e179]:
+        - heading "Body" [level=2] [ref=e180]
+        - generic [ref=e181]: // No request body
+      - generic [ref=e182]:
+        - heading "Routing" [level=2] [ref=e183]
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: controller
+            - generic [ref=e188]: App\Http\Controllers\Client\HomeController@index
+          - generic [ref=e189]:
+            - generic [ref=e190]: route name
+            - generic [ref=e192]: layouts
+          - generic [ref=e193]:
+            - generic [ref=e194]: middleware
+            - generic [ref=e196]: web
+      - generic [ref=e197]:
+        - heading "Routing parameters" [level=2] [ref=e198]
+        - generic [ref=e199]: // No routing parameters
+    - generic [ref=e202]:
+      - img [ref=e204]
+      - img [ref=e206]
+  - generic [ref=e210]:
+    - generic [ref=e212]:
+      - generic [ref=e213] [cursor=pointer]:
+        - generic: Request
+        - generic [ref=e214]: "500"
+      - generic [ref=e215] [cursor=pointer]:
+        - generic: Exceptions
+        - generic [ref=e216]: "2"
+      - generic [ref=e217] [cursor=pointer]:
+        - generic: Messages
+        - generic [ref=e218]: "1"
+      - generic [ref=e219] [cursor=pointer]:
+        - generic: Timeline
+      - generic [ref=e220] [cursor=pointer]:
+        - generic: Views
+        - generic [ref=e221]: "282"
+      - generic [ref=e222] [cursor=pointer]:
+        - generic: Queries
+        - generic [ref=e223]: "0"
+    - generic [ref=e224]:
+      - generic [ref=e232] [cursor=pointer]: GET /
+      - generic [ref=e233] [cursor=pointer]:
+        - generic: 38.03s
+      - generic [ref=e235] [cursor=pointer]:
+        - generic: 31MB
+      - generic [ref=e237] [cursor=pointer]:
+        - generic: 12.x
