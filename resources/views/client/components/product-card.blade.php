@@ -11,10 +11,6 @@
     if ($product->has_attribute && $product->sanpham_variants) {
         $tonKho = $product->sanpham_variants->sum('soluong');
     }
-
-    if ($product->has_attribute && $tonKho > 0) {
-        $product->load('sanpham_variants.attributesValues.bienthe');
-    }
 @endphp
 
 <div class="w-full">

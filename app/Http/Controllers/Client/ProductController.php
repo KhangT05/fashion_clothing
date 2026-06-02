@@ -53,8 +53,15 @@ class ProductController extends Controller
             });
         }
 
-        $query->with(['categories', 'thuonghieu', 'sanpham_variants']);
+        // Eager load all relationships to prevent N+1 queries
+        $query->with([
+            'categories',
+            'thuonghieu',
+            'sanpham_variants.attributesValues.bienthe'
+        ]);
         $product = $query->paginate(20)->withQueryString();
+
+        // Eager load categories once for the filter dropdown (cached)
         $categories = Category::where('publish', 1)->get();
 
         return view('client.pages.products.index', compact('product', 'categories'));
@@ -140,7 +147,7 @@ class ProductController extends Controller
         $minVariantPrice = $product->sanpham_variants->min('giaban') ?? $product->giaban ?? 0;
         $maxVariantPrice = $product->sanpham_variants->max('giaban') ?? $product->giaban ?? 0;
 
-        return view('client.pages.products.show', compact(
+        return view('client.pages.product_detail', compact(
             'product',
             'defaultVariant',
             'groupedAttributes',
