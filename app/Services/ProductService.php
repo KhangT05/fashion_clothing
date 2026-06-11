@@ -18,7 +18,7 @@ class ProductService extends BaseService
         ['sanpham_variants.giaban', '>=', 'min_price'],
         ['sanpham_variants.giaban', '<=', 'max_price'],
     ];
-    protected $with = ['categories', 'thuonghieu', 'sanpham_variants.attributesValues.bienthe'];
+    protected $with = ['categories', 'thuonghieu', 'sanpham_variants', 'sanpham_variants.attributesValues', 'sanpham_variants.attributesValues.bienthe'];
     public function __construct(
         ProductRepository $repository
     ) {

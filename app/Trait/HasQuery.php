@@ -8,7 +8,20 @@ trait HasQuery
 {
     public function scopeWithRelations($query, array $with = [])
     {
-        return $query->with($with)->withCount($with);
+        if (empty($with)) {
+            return $query;
+        }
+        $simpleRelations = [];
+        foreach ($with as $relation) {
+            if (strpos($relation, '.') === false) {
+                $simpleRelations[] = $relation;
+            }
+        }
+        $query->with($with);
+        if (!empty($simpleRelations)) {
+            $query->withCount($simpleRelations);
+        }
+        return $query;
     }
     public function scopeKeyword($query, array $keyword = [])
     {

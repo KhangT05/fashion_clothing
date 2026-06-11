@@ -73,7 +73,7 @@ class ProductController extends Controller
             ->with([
                 'categories',
                 'thuonghieu',
-                'sanpham_variants.attributesValues.attributeType',
+                'sanpham_variants.attributesValues.bienthe',
                 'binhluan' => function ($query) {
                     $query->where('trangthai', 1)
                         ->with('user')
@@ -125,9 +125,7 @@ class ProductController extends Controller
 
         $groupedAttributes = $product->sanpham_variants
             ->flatMap->attributesValues
-            ->groupBy(function ($item) {
-                return optional($item->attributeType->first())->name;
-            })
+            ->groupBy(fn($item) => $item->bienthe->type ?? 'Unknown')
             ->map(fn($group) => $group->unique('id')->values());
 
         $categoryIds = $product->categories->pluck('id');
